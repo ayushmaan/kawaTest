@@ -342,7 +342,7 @@ if __name__ == "__main__":
     
     Path(f'{fpo_name}/temp').mkdir(parents=True, exist_ok=True)
     Path(f'{fpo_name}/temp/chak_with').mkdir(parents=True, exist_ok=True)
-    Path('{fpo_name}/temp/result_f').mkdir(parents=True, exist_ok=True)
+    Path(f'{fpo_name}/temp/result_f').mkdir(parents=True, exist_ok=True)
     
     c = glob.glob(f'{main_folder_path}/*.geojson')
     r = glob.glob(f'{main_folder_path}/*.geojson')
