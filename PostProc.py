@@ -14,6 +14,8 @@ from itertools import product
 import itertools
 
 fldr = "/"+sys.argv[2]+"_"
+fpo_name = sys.argv[2]
+
 print(fldr)
 
 def intersecter(ori , other):
@@ -315,13 +317,13 @@ def processor_subtile_remov(l):
                 f_check = []
                 if not block_all_jsons.empty :
                     f_check.append(block_all_jsons['geometry'].to_dict())
-                    block_all_jsons.to_file(f'temp/block_{i}_{j}.geojson', driver='GeoJSON' )
+                    block_all_jsons.to_file(f'{fpo_name}/temp/block_{i}_{j}.geojson', driver='GeoJSON' )
                 if not subtile_remov.empty:
                     f_check.append(subtile_remov['geometry'].to_dict())
-                    subtile_remov.to_file(f'temp/subtileRemove_{i}_{j}.geojson', driver='GeoJSON' )
+                    subtile_remov.to_file(f'{fpo_name}/temp/subtileRemove_{i}_{j}.geojson', driver='GeoJSON' )
                 if not merged_.empty:
                     f_check.append(merged_['geometry'].to_dict())
-                    merged_[['geometry', 'place']].to_file(f'temp/merged_{i}_{j}.geojson', driver='GeoJSON' )
+                    merged_[['geometry', 'place']].to_file(f'{fpo_name}/temp/merged_{i}_{j}.geojson', driver='GeoJSON' )
         except Exception as e :
             print(e, (i,j))
 
@@ -338,9 +340,9 @@ if __name__ == "__main__":
     
     ''' make paths - temp/ , temp/result_f'''
     
-    Path(f'temp').mkdir(parents=True, exist_ok=True)
-    Path(f'temp/chak_with').mkdir(parents=True, exist_ok=True)
-    Path('temp/result_f').mkdir(parents=True, exist_ok=True)
+    Path(f'{fpo_name}/temp').mkdir(parents=True, exist_ok=True)
+    Path(f'{fpo_name}/temp/chak_with').mkdir(parents=True, exist_ok=True)
+    Path('{fpo_name}/temp/result_f').mkdir(parents=True, exist_ok=True)
     
     c = glob.glob(f'{main_folder_path}/*.geojson')
     r = glob.glob(f'{main_folder_path}/*.geojson')
@@ -362,7 +364,7 @@ if __name__ == "__main__":
         pool.starmap(processor_subtile_remov, product(parall_list))
         
 
-    folder = Path("temp/")
+    folder = Path(fpo_name+"/temp/")
     shapefiles_block = folder.glob("block*")
     orig_full = pd.concat([
         gpd.read_file(shp)
@@ -429,7 +431,7 @@ if __name__ == "__main__":
 
 
                 ''' write to text file'''
-                f_name = f"temp/chak_with/iter_{idx}.txt"
+                f_name = f"{fpo_name}/temp/chak_with/iter_{idx}.txt"
                 with open(f_name, 'w') as f:
                     f.write(" ".join(map(str, yess)))
 
@@ -444,7 +446,7 @@ if __name__ == "__main__":
         pool.starmap(return_overlap_, product(mpp))
         
     index_list= []
-    for fx in glob.glob("temp/chak_with/*"):
+    for fx in glob.glob(fpo_name+"/temp/chak_with/*"):
         f = open(fx,"r")
         index_list.append(f.readlines()[0].split(" "))
         f.close()
@@ -460,7 +462,7 @@ if __name__ == "__main__":
     final_ppc['centroid_y'] = final_ppc['geometry'].apply(lambda x: round(x.centroid.y, 3))
     final_ppc.drop('centroids', 1,inplace = True)
     
-    final_ppc.to_file('temp/result_f'+fldr+'.geojson', driver='GeoJSON')
+    final_ppc.to_file(fpo_name+'/'+fpo_name+'.geojson', driver='GeoJSON')
         
         
         
