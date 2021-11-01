@@ -462,7 +462,7 @@ if __name__ == "__main__":
     final_ppc['centroid_y'] = final_ppc['geometry'].apply(lambda x: round(x.centroid.y, 3))
     final_ppc.drop('centroids', 1,inplace = True)
     
-    final_ppc.to_file(fpo_name+'.geojson', driver='GeoJSON')
+    final_ppc.to_file(fpo_name+"/"+fpo_name+'.geojson', driver='GeoJSON')
         
         
         
